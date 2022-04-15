@@ -1,6 +1,6 @@
 import java.util.Objects;
 
-public class Cliente {
+public class Cliente implements Comparable<Cliente> {
     private String codiceFiscale;
     private String denominazione;
     private String indirizzo;
@@ -71,5 +71,10 @@ public class Cliente {
     @Override
     public String toString() {
         return codiceFiscale + " " + denominazione + " " + indirizzo + " " + citta + " " + telefono;
+    }
+
+    @Override
+    public int compareTo(Cliente c) {
+        return this.denominazione.compareTo(c.denominazione);
     }
 }
