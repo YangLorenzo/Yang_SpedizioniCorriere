@@ -24,7 +24,8 @@ public class Corriere {
         if (!spedizioni.containsKey(s)) {
             Cliente mittente = getCliente(codice_mittente);
             Cliente destinatario = getCliente(codice_destinatario);
-            spedizioni.put(s, new Cliente[]{mittente, destinatario});
+            if (mittente != null && destinatario != null)
+                spedizioni.put(s, new Cliente[]{mittente, destinatario});
         }
     }
 
