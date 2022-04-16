@@ -14,18 +14,33 @@ public class Corriere {
         this.spedizioni = new HashMap<>();
     }
 
-    public void nuovoCliente(Cliente c) {
-        if (!clienti.containsKey(c)) {
+    public void nuovoCliente() {
+        try {
+            Cliente c = Input.creaCliente();
+            if (clienti.containsKey(c))
+                throw new IllegalArgumentException("il cliente gia' esiste");
             clienti.put(c, new LinkedList<>());
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
         }
     }
 
-    public void nuovaSpedizione(Spedizione s, String codice_mittente, String codice_destinatario) {
-        if (!spedizioni.containsKey(s)) {
-            Cliente mittente = getCliente(codice_mittente);
-            Cliente destinatario = getCliente(codice_destinatario);
-            if (mittente != null && destinatario != null)
-                spedizioni.put(s, new Cliente[]{mittente, destinatario});
+    public void nuovaSpedizione() {
+        try {
+            Spedizione s = Input.creaSpedizione();
+            if (spedizioni.containsKey(s)) throw new IllegalArgumentException("la spedizione gia' esiste'");
+
+            Cliente mittente = getCliente(Input.getCodiceFiscale("mittente"));
+            Cliente destinatario = getCliente(Input.getCodiceFiscale("destinatario"));
+
+            if (mittente == null)
+                throw new IllegalArgumentException("mittente inserito non e' il nostro cliente");
+            if (destinatario == null)
+                throw new IllegalArgumentException("destinatario inserito non e' il nostro cliente");
+
+            spedizioni.put(s, new Cliente[]{mittente, destinatario});
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -37,20 +52,25 @@ public class Corriere {
         return null;
     }
 
-    public void stampa_spedizioni() {
-        for (Spedizione s : spedizioni.keySet()) {
-            System.out.println(s);
-            System.out.println("mittente: " + spedizioni.get(s)[0]);
-            System.out.println("destinatario: " + spedizioni.get(s)[1]);
-            System.out.println("----------------------------------------");
-        }
+    public void stampa_tutteSpedizioni() {
+        if (!spedizioni.isEmpty()) {
+            for (Spedizione s : spedizioni.keySet()) {
+                System.out.println("------------------------------");
+                System.out.println(s);
+                System.out.println("mittente:");
+                System.out.println(spedizioni.get(s)[0]);
+                System.out.println("destinatario:");
+                System.out.println(spedizioni.get(s)[1]);
+                System.out.println("------------------------------");
+            }
+        } else System.out.println("nessuna spedizione");
     }
 
-    public void stampa_spedizion_cliente(String codice_cliente) {
-        Cliente c = getCliente(codice_cliente);
-        System.out.println(c + ":");
-        for (Spedizione s : clienti.get(c)) {
-            System.out.println(s);
-        }
-    }
+//    public void stampa_spedizioneClient(String codice_cliente) {
+//        Cliente c = getCliente(codice_cliente);
+//        System.out.println(c + ":");
+//        for (Spedizione s : clienti.get(c)) {
+//            System.out.println(s);
+//        }
+//    }
 }

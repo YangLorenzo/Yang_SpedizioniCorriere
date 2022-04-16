@@ -50,7 +50,8 @@ public class Spedizione {
 
     @Override
     public String toString() {
-        return codice + " " + descrizione + " " + formattedDate(dataConsegna);
+        return "spedizione cod." + codice + ": " + descrizione + "\n"
+                + formattedDate(dataConsegna);
     }
 
     private String formattedDate(LocalDate d) {

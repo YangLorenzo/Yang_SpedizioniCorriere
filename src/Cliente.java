@@ -70,11 +70,12 @@ public class Cliente implements Comparable<Cliente> {
 
     @Override
     public String toString() {
-        return codiceFiscale + " " + denominazione + " " + indirizzo + " " + citta + " " + telefono;
+        return codiceFiscale + " " + denominazione + " " + "\n"
+                + indirizzo + " " + citta + " " + telefono;
     }
 
     @Override
     public int compareTo(Cliente c) {
-        return this.denominazione.compareTo(c.denominazione);
+        return this.codiceFiscale.compareTo(c.codiceFiscale);
     }
 }
