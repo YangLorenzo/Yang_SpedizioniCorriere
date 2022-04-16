@@ -1,6 +1,6 @@
-import java.util.Objects;
+import java.io.Serializable;
 
-public class Cliente implements Comparable<Cliente> {
+public class Cliente implements Comparable<Cliente>, Serializable {
     private String codiceFiscale;
     private String denominazione;
     private String indirizzo;
@@ -56,25 +56,12 @@ public class Cliente implements Comparable<Cliente> {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Cliente cliente = (Cliente) o;
-        return codiceFiscale.equals(cliente.codiceFiscale);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(codiceFiscale);
-    }
-
-    @Override
     public String toString() {
         return codiceFiscale + " " + denominazione + " " + indirizzo + " " + citta + " " + telefono;
     }
 
     @Override
     public int compareTo(Cliente c) {
-        return this.denominazione.compareTo(c.denominazione);
+        return this.codiceFiscale.compareTo(c.codiceFiscale);
     }
 }

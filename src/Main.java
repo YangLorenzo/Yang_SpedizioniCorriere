@@ -1,69 +1,46 @@
-import java.util.Scanner;
-
-import static java.lang.System.out;
-
 public class Main {
-    private static final Scanner in = new Scanner(System.in);
-
-    private static void menu() {
+    public static void menu() {
         System.out.println("1) memorizza un nuovo cliente");
         System.out.println("2) memorizza una nuova spedizione");
-        System.out.println("3) visualizza tutte le spedizioni");
-        System.out.println("4) salva i dati");
+        System.out.println("3) visualizza tutti i clienti");
+        System.out.println("4) visualizza tutte le spedizioni");
+        System.out.println("5) spedizione per il codice");
+        System.out.println("6) spedizioni di un cliente");
         System.out.println("0) Esc");
-    }
-
-    private static int getOpzione() {
-        int op;
-        while (true) {
-            try {
-                out.print("cosa vuoi fare? ");
-                op = in.nextInt();
-                if ((op < 1 || op > 4) && op != 0) throw new IllegalArgumentException();
-                return op;
-            } catch (IllegalArgumentException e) {
-                out.println("numero invalido");
-            }
-        }
     }
 
     public static void main(String[] args) {
         Corriere corriere = new Corriere();
+        corriere.carica();
+
         int op = -1;
         while (op != 0) {
             menu();
-            op = getOpzione();
+            op = Input.getOpzione();
             switch (op) {
-                case 1: {
-                    Cliente c = GestioneInput.creaCliente();
-                    corriere.nuovoCliente(c);
-                    out.println("aggiunto con successo");
+                case 1:
+                    corriere.nuovoCliente();
                     break;
-                }
-                case 2: {
-                    Spedizione s = GestioneInput.creaSpedizione();
-
-                    out.println("il codice fiscale del mittente: ");
-                    in.nextLine();
-                    String cod_mittente = in.nextLine();
-                    out.println("il codice fiscale del destinatario: ");
-                    String cod_destinatario = in.nextLine();
-
-                    corriere.nuovaSpedizione(s, cod_mittente, cod_destinatario);
-
-                    out.println("aggiunta con successo");
+                case 2:
+                    corriere.nuovaSpedizione();
                     break;
-                }
                 case 3:
-                    corriere.stampa_spedizioni();
+                    corriere.stampa_tuttiClienti();
                     break;
                 case 4:
+                    corriere.stampa_tutteSpedizioni();
                     break;
-
+                case 5:
+                    corriere.stampa_spedizioniDiCliente();
+                    break;
+                case 6:
+                    corriere.stampa_spedizioneDiCodice();
+                    break;
                 default:
                     break;
             }
         }
 
+        corriere.salva();
     }
 }
