@@ -1,8 +1,9 @@
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-public class Spedizione {
+public class Spedizione implements Serializable {
     private static int _codice = 0;
 
     private final int codice;

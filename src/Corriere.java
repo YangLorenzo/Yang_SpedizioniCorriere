@@ -1,8 +1,9 @@
+import java.io.*;
 import java.util.*;
 
 public class Corriere {
-    private static final String CLIENTI_PATH = ".\\clienti.bin";
-    private static final String SPEDIZIONI_PATH = ".\\spedizioni.bin";
+    private static final String CLIENTI_PATH = ".\\Yang_SpedizioniCorriere\\clienti.bin";
+    private static final String SPEDIZIONI_PATH = ".\\Yang_SpedizioniCorriere\\spedizioni.bin";
 
     // key: cliente     value: la lista di tutte le spedizioni che ha fatto
     private Map<Cliente, List<Spedizione>> clienti;
@@ -18,7 +19,7 @@ public class Corriere {
         try {
             Cliente c = Input.creaCliente();
             if (clienti.containsKey(c))
-                throw new IllegalArgumentException("il cliente gia' esiste");
+                throw new IllegalArgumentException("\nil cliente gia' esiste\n");
             clienti.put(c, new LinkedList<>());
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
@@ -28,17 +29,19 @@ public class Corriere {
     public void nuovaSpedizione() {
         try {
             Spedizione s = Input.creaSpedizione();
-            if (spedizioni.containsKey(s)) throw new IllegalArgumentException("la spedizione gia' esiste'");
 
             Cliente mittente = getCliente(Input.getCodiceFiscale("mittente"));
             Cliente destinatario = getCliente(Input.getCodiceFiscale("destinatario"));
 
             if (mittente == null)
-                throw new IllegalArgumentException("mittente inserito non e' il nostro cliente");
+                throw new IllegalArgumentException("mittente inserito non e' il nostro cliente\n");
             if (destinatario == null)
-                throw new IllegalArgumentException("destinatario inserito non e' il nostro cliente");
+                throw new IllegalArgumentException("destinatario inserito non e' il nostro cliente\n");
 
+            // aggiungo le informazioni della spedizione
             spedizioni.put(s, new Cliente[]{mittente, destinatario});
+            // aggiungo la spedizione che ha fatto il cliente
+            clienti.get(mittente).add(s);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
@@ -63,14 +66,66 @@ public class Corriere {
                 System.out.println(spedizioni.get(s)[1]);
                 System.out.println("------------------------------");
             }
-        } else System.out.println("nessuna spedizione");
+        } else System.out.println("\nnessuna spedizione\n");
     }
 
-//    public void stampa_spedizioneClient(String codice_cliente) {
-//        Cliente c = getCliente(codice_cliente);
-//        System.out.println(c + ":");
-//        for (Spedizione s : clienti.get(c)) {
-//            System.out.println(s);
-//        }
-//    }
+    public void stampa_tuttiClienti() {
+        if (!clienti.isEmpty()) {
+            System.out.println("\nla lista dei clienti:");
+            for (Cliente c : clienti.keySet())
+                System.out.println("\n" + c);
+            System.out.println();
+        } else System.out.println("\nnessun cliente\n");
+    }
+
+    public void stampa_spedizioniDiCliente() {
+        Cliente c = getCliente(Input.getCodiceFiscale("mittente"));
+        if (!(clienti.get(c)).isEmpty()) {
+            System.out.println("\nspedizioni che ha fatto:\n");
+            for (Spedizione s : clienti.get(c))
+                System.out.println(s);
+            System.out.println();
+        } else System.out.println("\nnon ha fatto nessuna spedizione\n");
+    }
+
+    public void carica() {
+        try {
+
+            File f_clienti = new File(CLIENTI_PATH);
+            File f_spedizioni = new File(SPEDIZIONI_PATH);
+            if (!f_clienti.exists() || !f_spedizioni.exists())
+                return;
+
+            // caricamento dati clienti
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(CLIENTI_PATH));
+            this.clienti = (TreeMap<Cliente, List<Spedizione>>) ois.readObject();
+
+            // caricamento dati spedizioni
+            ois = new ObjectInputStream(new FileInputStream(SPEDIZIONI_PATH));
+            this.spedizioni = (HashMap<Spedizione, Cliente[]>) ois.readObject();
+
+            ois.close();
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("\nErrore nella lettura da file\n");
+        }
+    }
+
+    public void salva() {
+        try {
+            // salvataggio dei clienti
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(CLIENTI_PATH));
+            oos.writeObject(this.clienti);
+
+            // salvataggio delle spedizioni
+            oos = new ObjectOutputStream(new FileOutputStream(SPEDIZIONI_PATH));
+            oos.writeObject(this.spedizioni);
+
+            oos.close();
+
+            System.out.println("\ndati salvati\n");
+        } catch (IOException e) {
+            System.out.println("\nErrore nella scrittura del file\n");
+        }
+    }
+
 }

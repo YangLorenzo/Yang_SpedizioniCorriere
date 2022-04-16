@@ -13,7 +13,7 @@ public class Input {
             try {
                 out.print("cosa vuoi fare? ");
                 op = in.nextInt();
-                if ((op < 1 || op > 4) && op != 0) throw new IllegalArgumentException();
+                if ((op < 1 || op > 6) && op != 0) throw new IllegalArgumentException();
                 return op;
             } catch (IllegalArgumentException e) {
                 out.println("numero invalido");
