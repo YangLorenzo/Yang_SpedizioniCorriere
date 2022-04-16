@@ -47,7 +47,7 @@ public class Input {
         return new Cliente(codiceFiscale, denominazione, indirizzo, citta, telefono);
     }
 
-    public static Spedizione creaSpedizione() {
+    public static Spedizione creaSpedizione(int codice) {
         out.println("la descrizione della della spedizione: ");
         in.nextLine();
         String descrizione = in.nextLine();
@@ -62,7 +62,7 @@ public class Input {
                 int anno = in.nextInt();
                 LocalDate date = LocalDate.of(anno, mese, giorno);
 
-                return new Spedizione(descrizione, date);
+                return new Spedizione(codice, descrizione, date);
             } catch (DateTimeException e) {
                 out.println(e.getMessage());
             }

@@ -4,14 +4,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Spedizione implements Serializable {
-    private static int _codice = 0;
-
     private final int codice;
     private String descrizione;
     private LocalDate dataConsegna;
 
-    public Spedizione(String descrizione, LocalDate dataConsegna) {
-        this.codice = _codice++;
+    public Spedizione(int codice, String descrizione, LocalDate dataConsegna) {
+        this.codice = codice;
         this.descrizione = descrizione;
         this.dataConsegna = dataConsegna;
     }
@@ -51,8 +49,7 @@ public class Spedizione implements Serializable {
 
     @Override
     public String toString() {
-        return "spedizione cod." + codice + ": " + descrizione + "\n"
-                + formattedDate(dataConsegna);
+        return "spedizione cod." + codice + ": " + descrizione + " " + formattedDate(dataConsegna);
     }
 
     private String formattedDate(LocalDate d) {

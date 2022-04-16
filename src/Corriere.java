@@ -4,6 +4,7 @@ import java.util.*;
 public class Corriere {
     private static final String CLIENTI_PATH = ".\\Yang_SpedizioniCorriere\\clienti.bin";
     private static final String SPEDIZIONI_PATH = ".\\Yang_SpedizioniCorriere\\spedizioni.bin";
+    private int cod_spedizione;
 
     // key: cliente     value: la lista di tutte le spedizioni che ha fatto
     private Map<Cliente, List<Spedizione>> clienti;
@@ -13,6 +14,8 @@ public class Corriere {
     public Corriere() {
         this.clienti = new TreeMap<>();
         this.spedizioni = new HashMap<>();
+
+        this.cod_spedizione = 1;
     }
 
     public void nuovoCliente() {
@@ -28,7 +31,7 @@ public class Corriere {
 
     public void nuovaSpedizione() {
         try {
-            Spedizione s = Input.creaSpedizione();
+            Spedizione s = Input.creaSpedizione(this.cod_spedizione++);
 
             Cliente mittente = getCliente(Input.getCodiceFiscale("mittente"));
             Cliente destinatario = getCliente(Input.getCodiceFiscale("destinatario"));
@@ -60,9 +63,9 @@ public class Corriere {
             for (Spedizione s : spedizioni.keySet()) {
                 System.out.println("------------------------------");
                 System.out.println(s);
-                System.out.println("mittente:");
+                System.out.print("mittente: ");
                 System.out.println(spedizioni.get(s)[0]);
-                System.out.println("destinatario:");
+                System.out.print("destinatario: ");
                 System.out.println(spedizioni.get(s)[1]);
                 System.out.println("------------------------------");
             }
@@ -104,10 +107,22 @@ public class Corriere {
             ois = new ObjectInputStream(new FileInputStream(SPEDIZIONI_PATH));
             this.spedizioni = (HashMap<Spedizione, Cliente[]>) ois.readObject();
 
+            this.cod_spedizione = getLastCodSpedizione();
+
             ois.close();
+
+
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("\nErrore nella lettura da file\n");
         }
+    }
+
+    // serve per recuperare l'ultimo codice di spedizione
+    private int getLastCodSpedizione() {
+        int max = 0;
+        for (Spedizione s : this.spedizioni.keySet())
+            if (s.getCodice() > max) max = s.getCodice();
+        return max + 1;
     }
 
     public void salva() {

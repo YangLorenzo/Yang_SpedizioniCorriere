@@ -57,8 +57,7 @@ public class Cliente implements Comparable<Cliente>, Serializable {
 
     @Override
     public String toString() {
-        return codiceFiscale + " " + denominazione + " " + "\n"
-                + indirizzo + " " + citta + " " + telefono;
+        return codiceFiscale + " " + denominazione + " " + indirizzo + " " + citta + " " + telefono;
     }
 
     @Override
