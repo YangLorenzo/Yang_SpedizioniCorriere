@@ -69,7 +69,7 @@ public class Corriere {
 
     public void stampa_spedizioniDiCliente() {
         Cliente c = getCliente(Input.getCodiceFiscale("mittente"));
-        if (!(clienti.get(c)).isEmpty()) {
+        if (c != null && !(clienti.get(c)).isEmpty()) {
             System.out.println("\nspedizioni che ha fatto:\n");
             for (Spedizione s : clienti.get(c))
                 System.out.println(s);

@@ -31,10 +31,10 @@ public class Main {
                     corriere.stampa_tutteSpedizioni();
                     break;
                 case 5:
-                    corriere.stampa_spedizioniDiCliente();
+                    corriere.stampa_spedizioneDiCodice();
                     break;
                 case 6:
-                    corriere.stampa_spedizioneDiCodice();
+                    corriere.stampa_spedizioniDiCliente();
                     break;
                 default:
                     break;
